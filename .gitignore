@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+config.json
+sounds/*
+!sounds/ここに音声ファイルを入れる.txt
