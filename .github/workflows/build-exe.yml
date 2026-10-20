@@ -1,0 +1,38 @@
+name: Build Windows exe
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pygame-ce websocket-client pyinstaller
+      - run: pyinstaller --noconsole --onefile --name osu_beat_sound nc_beat.py
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist/pkg/sounds | Out-Null
+          Copy-Item dist/osu_beat_sound.exe dist/pkg/
+          Copy-Item README_exe.md dist/pkg/README.md
+          Copy-Item LICENSE dist/pkg/
+          Copy-Item "sounds/ここに音声ファイルを入れる.txt" dist/pkg/sounds/
+          Compress-Archive -Path dist/pkg/* -DestinationPath osu_beat_sound_windows.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: osu_beat_sound_windows
+          path: osu_beat_sound_windows.zip
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: osu_beat_sound_windows.zip
