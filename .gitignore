@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
 config.json
+# 音声ファイルは著作権の都合でリポジトリに含めない
 sounds/*
 !sounds/ここに音声ファイルを入れる.txt

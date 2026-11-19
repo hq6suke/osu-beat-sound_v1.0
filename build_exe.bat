@@ -1,13 +1,13 @@
 @echo off
 cd /d "%~dp0"
 echo [1/3] Installing libraries...
-python -m pip install pygame-ce websocket-client pyinstaller
+python -m pip install pygame-ce websocket-client pillow pyinstaller
 if errorlevel 1 goto :error
-echo [2/3] Building exe... (this takes a few minutes)
-python -m PyInstaller --noconsole --onefile --name osu_beat_sound nc_beat.py
+echo [2/3] Building the exe... (this takes a few minutes)
+python -m PyInstaller --noconsole --onefile --icon icon.ico --add-data "icon.ico;." --name osu_beat_sound nc_beat.py
 if errorlevel 1 goto :error
 echo [3/3] Done!
-echo Your exe is here: dist\osu_beat_sound.exe
+echo Exe: dist\osu_beat_sound.exe
 echo Put the "sounds" folder next to the exe when you share it.
 goto :end
 :error
